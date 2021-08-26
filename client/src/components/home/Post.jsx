@@ -35,16 +35,21 @@ const useStyle = makeStyles({
 
 
 
-const Post = () => {
+const Post = ({ post }) => {
     const classes = useStyle();
-    const url ='https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=752&q=80';
+    const url = post.picture ? post.picture : 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=752&q=80';
+    
+    const addEllipsis = (str, limit) => {
+        return str.length > limit ? str.substring(0, limit) + '...' : str;
+    } 
+    
     return (
         <Box className={classes.container}>
         <img src={url} alt="post" className={classes.image} />
-        {/* <Typography className={classes.textColor}>{post.categories}</Typography>
+        <Typography className={classes.textColor}>{post.categories}</Typography>
         <Typography className={classes.heading}>{addEllipsis(post.title, 20)}</Typography>
         <Typography className={classes.textColor}>Author: {post.username}</Typography>
-        <Typography className={classes.detail}>{addEllipsis(post.description, 100)}</Typography> */}
+        <Typography className={classes.detail}>{addEllipsis(post.description, 100)}</Typography>
         </Box>
     )
 }

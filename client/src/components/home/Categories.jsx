@@ -20,17 +20,19 @@ const useStyle = makeStyles({
     }
 })
 
-const Categories = ()  => {
+const Categories = ({ match })  => {
     const classes = useStyle();
+    const location = useLocation();
+    let params = new URLSearchParams(location.search);
     return (
         <>
         <Link to='/create' className={classes.link}><Button variant="contained" className={classes.write}>Create Blog</Button></Link>
         <Table className={classes.table}>
                 <TableHead>
                     <TableCell>
-                        {/* <Link to={"/"} className={classes.link}> */}
+                        <Link to={"/"} className={classes.link}>
                             All Categories
-                        {/* </Link> */}
+                        </Link>
                     </TableCell>
                 </TableHead>
                 <TableBody>
@@ -38,9 +40,9 @@ const Categories = ()  => {
                         categories.map(category => (
                             <TableRow>
                                 <TableCell>
-                                    {/* <Link to={`/?category=${category}`} className={classes.link}> */}
+                                    <Link to={`/?category=${category}`} className={classes.link}>
                                         {category}
-                                    {/* </Link> */}
+                                    </Link>
                                 </TableCell>
                             </TableRow>
                         ))

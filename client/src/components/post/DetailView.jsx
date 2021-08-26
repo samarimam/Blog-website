@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Box, makeStyles, Typography, Grid } from '@material-ui/core';
 import { Delete, Edit } from '@material-ui/icons';
 import { Link, useHistory } from 'react-router-dom'
+import { getPost,deletePost } from '../../service/api';
 
 const useStyle = makeStyles(theme => ({
     container: {
@@ -44,24 +45,45 @@ const useStyle = makeStyles(theme => ({
     }
 }));
 
-const DetailView = () => {
+const DetailView = ({match}) => {
     const classes = useStyle();
     const url = 'https://images.unsplash.com/photo-1543128639-4cb7e6eeef1b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bGFwdG9wJTIwc2V0dXB8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80';
+    const history = useHistory();
+    
+    const [post, setPost] = useState({});
+
+    useEffect(() => {
+        const fetchData = async () => {
+            let data = await getPost(match.params.id);
+            console.log(data);
+            setPost(data);
+        }
+        fetchData();
+        console.log(post.username);
+    }, []);
+
+    const deleteBlog = async () => {    
+        await deletePost(post._id);
+        history.push('/')
+    }
+
     return (
         <Box className={classes.container}>
-            <img src={url} alt="banner" className={classes.image}/>
+            <img src={post.picture || url} alt="post" className={classes.image} />
             <Box className={classes.icons}>
-                        <Link to="/update"><Edit className={classes.icon} color="primary"/></Link>
-                        <Delete className={classes.icon} color="error"/>
+                        <Link to={`/update/${post._id}`}><Edit className={classes.icon} color="primary"/></Link>
+                        <Link><Delete onClick={() => deleteBlog()} className={classes.icon} color="error" /></Link>
             </Box>
             
-            <Typography className={classes.heading}>Title of blog</Typography>
+            <Typography className={classes.heading}>{post.title}</Typography>
             <Box className={classes.author}>
-                <Typography>Author:<span style={{fontWeight: 600}}>samar Imam</span></Typography>
-                <Typography  style={{marginLeft:'auto'}}>25 Aug 2021</Typography>
+            <Link to={`/?username=${post.username}`} className={classes.link}>
+                    <Typography>Author: <span style={{fontWeight: 600}}>{post.username}</span></Typography>
+                </Link>
+                <Typography style={{marginLeft: 'auto'}}>{new Date(post.createdDate).toDateString()}</Typography>
 
             </Box>
-            <Typography className={classes.detail}>cvmkmvkmk</Typography>
+            <Typography className={classes.detail}>{post.description}</Typography>
         </Box>
     )
 }

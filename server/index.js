@@ -10,7 +10,6 @@ app.use(cors());
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-console.log(testing)
 
 app.use('/', Router);
 

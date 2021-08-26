@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Box, makeStyles, TextareaAutosize, Button, FormControl, InputBase } from '@material-ui/core';
 import { AddCircle as Add, AddCircle, CallEnd } from '@material-ui/icons';
 import { useHistory, useLocation } from 'react-router-dom';
+import { getPost, updatePost } from '../../service/api';
 
 
 const useStyle = makeStyles(theme => ({
@@ -37,11 +38,39 @@ const useStyle = makeStyles(theme => ({
     }
 }));
 
+const initialPost = {
+    title: '',
+    description: '',
+    picture: '',
+    username: 'codeforinterview',
+    categories: 'Tech',
+    createdDate: new Date()
+}
 
-const UpdateView = () => {
+const UpdateView = ({ match }) => {
+    const history = useHistory();
+    const [post, setPost] = useState(initialPost);
     const [file, setFile] = useState('');
     const url ='https://images.unsplash.com/photo-1543128639-4cb7e6eeef1b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bGFwdG9wJTIwc2V0dXB8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80';
     const classes = useStyle();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            let data = await getPost(match.params.id);
+            setPost(data);
+        }
+        fetchData();
+    }, []);
+
+    const handleChange = (e) => {
+        setPost({ ...post, [e.target.name]: e.target.value });
+    }
+
+    const updateBlogPost = async () => {
+        await updatePost(match.params.id, post);
+        history.push(`/details/${match.params.id}`);
+    }
+
     return (
         <Box className={classes.container}>
             <img src={url} alt="post" className={classes.image} />
@@ -55,15 +84,16 @@ const UpdateView = () => {
                     style={{ display: "none" }}
                     onChange={(e) => setFile(e.target.files[0])}
                 />
-                <InputBase name='title' placeholder="Title" className={classes.textfield} />
-                <Button variant="contained" color="primary">Update</Button>
+                <InputBase onChange={(e) => handleChange(e)} name='title' value={post.title} placeholder="Title" className={classes.textfield} />
+                <Button onClick={() => updateBlogPost()} variant="contained" color="primary">Update</Button>
             </FormControl>
             <TextareaAutosize
                 rowsMin={5}
                 placeholder="Tell your story..."
                 className={classes.textarea}
                 name='description'
-                // onChange={(e) => handleChange(e)} 
+                value={post.description}
+                onChange={(e) => handleChange(e)} 
             />
         </Box>
     )
