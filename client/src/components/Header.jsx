@@ -59,8 +59,10 @@ const Header = () => {
         <AppBar className={classes.component}>
             <Toolbar className={classes.container}>
                 <Link to='/'>HOME</Link>
-                <Link to='/about'>ABOUT</Link>
-                <Link to='/contact'>CONTACT</Link>
+                <a href='https://samarimam.github.io/myportfolio/'>ABOUT</a>
+                <a href='https://www.linkedin.com/in/samar-imam-7922211b7/'>
+                    CONTACT
+                </a>
                 <Link>{button}</Link>
             </Toolbar>
         </AppBar>

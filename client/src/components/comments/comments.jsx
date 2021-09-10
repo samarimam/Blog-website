@@ -50,6 +50,7 @@ const Comments = ({ post }) => {
     const [comments, setComments] = useState([]);
     const [data, setData] = useState();
     const [toggle, setToggle] = useState(false);
+    let [count, setcount] = useState(0);
 
     useEffect(() => {
         const getData = async () => {
@@ -57,7 +58,7 @@ const Comments = ({ post }) => {
             setComments(response);
         };
         getData();
-    }, [toggle, post]);
+    }, [toggle, post, cout]);
 
     const handleChange = (e) => {
         setComment({
@@ -71,6 +72,7 @@ const Comments = ({ post }) => {
 
     const addComment = async () => {
         await newComment(comment);
+        setcount = count++;
         setData("");
         setToggle((prev) => !prev);
     };
