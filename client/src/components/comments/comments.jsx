@@ -58,7 +58,7 @@ const Comments = ({ post }) => {
             setComments(response);
         };
         getData();
-    }, [toggle, post, cout]);
+    }, [toggle, post, count]);
 
     const handleChange = (e) => {
         setComment({
